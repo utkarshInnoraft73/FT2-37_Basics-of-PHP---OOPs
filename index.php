@@ -6,15 +6,43 @@
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   </head>
+  <style>
+
+    .error{
+      color: red;
+    }
+  </style>
 
   <body>
 
   <?php
-    $firstName = $lastName = "";
+
+    $fname = $lname = "";
+    $fnameErr= $lnameErr="";
 
     if($_SERVER["REQUEST_METHOD"]== "POST"){
-        $firstName = test_input($_POST["firstName"]);
-        $lastName = test_input($_POST["lastName"]);
+      // Checking if the First name field only contains letters, dashes, apostrophes and whitespaces.
+      if (empty($_POST["fname"])) {
+        $fnameErr = "This field is required";
+      }
+      else if (!preg_match("/^[a-zA-Z-' ]*$/",$_POST["fname"])) {
+        $fnameErr = "Only letters and white space allowed";
+      }
+      else {
+        $fname = test_input($_POST["fname"]);
+      }
+
+      // Checking if the Last name field only contains letters, dashes, apostrophes and whitespaces.
+
+      if (empty($_POST["lname"])) {
+        $lnameErr = "This field is required";
+      }
+      else if (!preg_match("/^[a-zA-Z-' ]*$/",$_POST["lname"])) {
+        $lnameErr = "Only letters and white space allowed";
+      }
+      else {
+        $lname = test_input($_POST["lname"]);
+      }
     }
     function test_input($data) {
       $data = trim($data);
@@ -22,7 +50,39 @@
       $data = htmlspecialchars($data);
       return $data;
     }
-    ?>
+
+    // Making the person class
+
+    class Person{
+      public $fname;
+      public $lname;
+
+      // Setting First name
+      function set_firstName($fname){
+        $this->fname = $fname;
+      }
+
+      // Setting Last name
+      function set_lastName($lname){
+        $this->lname = $lname;
+      }
+
+      // Getting First name
+      function get_firstName(){
+        return $this->fname;
+      }
+
+      // Getting Last name
+      function get_lastName(){
+        return $this->lname;
+      }
+    }
+
+    $person = new Person();
+    $person->set_firstName($fname);
+    $person->set_lastName($lname);
+
+?>
 
 
 
@@ -33,42 +93,30 @@
       <div class="card-header">
         Personal Details.
       </div>
+      <!-- After given input, The message will be show -->
+      <h3 class="mt-3 ms-3">Hello, <?php echo "{$person->get_firstName()} {$person->get_lastName()}";?></h3>
       <div class="card-body">
       <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
       <div class="mb-3">
-        <label for="" class="form-label">First name</label>
-        <input type="text" class="form-control" id="" aria-describedby="" name = firstName>
+        <label for="" class="form-label">First name
+          <span class="error">*<?php echo "{$fnameErr}"?><span>
+            </label>
+            <input type="text" class="form-control" id="" aria-describedby="" name = "fname">
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label">Last name
+          <span class="error">*<?php echo "{$lnameErr}"?><span>
+
+        </label>
+        <input type="text" class="form-control" id="" aria-describedby="" name = "lname">
       </div>
       <div class="mb-3">
-        <label for="" class="form-label">Last name</label>
-        <input type="text" class="form-control" id="" aria-describedby="" name="lastName">
-      </div>
-      <div class="mb-3">
-        <label for="" class="form-label">Last name</label>
-        <input type="text" class="form-control" id="" aria-describedby="" name="lastName" value = "<?php echo "{$firstName} {$lastName}"?>" disabled>
+        <label for="" class="form-label">Full name</label>
+        <input type="text" class="form-control" id="" aria-describedby="" name="lastName" value = "<?php echo "{$fname} {$lname}"?>" disabled>
       </div>
       <input type="submit" class="btn btn-primary">
     </form>
       </div>
-
-
-      <div class="container mt-5 py-3">
-      <div class="card" style="width: 18rem;">
-  <div class="card-header">
-    Your details
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-        <?php echo "First Name: " . $firstName?>
-    </li>
-    <li class="list-group-item">
-    <?php echo "Last Name: " . $lastName?>
-    </li>
-    <li class="list-group-item">
-    <?php echo "Full Name: " . $firstName . " " . $lastName?>
-    </li>
-  </ul>
-</div>
       </div>
     </div>
   </div>
