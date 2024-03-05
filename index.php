@@ -1,148 +1,112 @@
+<?php
+// Importing the file user.php.
+require("./user.php");
+/**
+ * The patter for name field.
+ */
+const PATTERN = "/^[a-zA-Z-' ]*$/";
+
+/**
+ * For error messages.
+ * fnameErr for first name error.
+ * lnameErr for last name error.
+ * fullNameErr for full name error.
+ */
+$fnameErr = $lnameErr = $fullNameErr = "";
+
+/**
+ * Method to check the inputs.
+ */
+function testInput($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+
+    return $data;
+}
+
+/**
+ * Creating the method for validating the fist name and last name.
+ */
+function nameValidation($data, &$errorMsg)
+{
+    if (empty($data)) {
+        $errorMsg = "This is required field.";
+        return "";
+    } else {
+        $name = testInput($data);
+        if (!preg_match(PATTERN, $name)) {
+            $errorMsg = "Invalid input.";
+            return "";
+        } else if (empty($name)) {
+            $errorMsg = "Invalid input.";
+            return "";
+        } else {
+            return $name;
+        }
+    }
+}
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $fname = nameValidation($_POST['fname'], $fnameErr);
+    $lname = nameValidation($_POST['lname'], $lnameErr);
+
+    if(!empty($_POST['fullName'])){
+        $fullNameErr = "This field is not editable.";
+    }
+}
+
+// Message to show after successfull submit the form 
+if(!empty($fname) && !empty($lname)){
+    $message = "Hello, {$fname} {$lname}."; 
+}
+
+$user = new User($fname, $lname);
+?>
 <!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Assignment 1</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 
-
 <body>
-
-    <?php
-    /*
-    These varible contains the error message.
-    fnameErr for first name error.
-    lnameErr for last name error.
-    fullNameErr for full name error.
-    */
-        $fnameErr = $lnameErr ="";
-        $fullNameErr = "Invalid input.";
-        
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        
-
-        // Validating Input data.
-        function checkValidation($data, &$errorMsg)
-        {
-            if (empty($data)) {
-                $errorMsg = "This field is required";
-            } 
-            else{
-                $name = test_input($data);
-                if(empty($name)){
-                    $errorMsg = "Invalid input.";
-                }
-
-                if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
-                    $errorMsg = "Only letters are allowed.";
-                } 
-                else {
-                    return $name;
-                }
-            }
-        }
-
-         // Cheecking input data.
-         function test_input($data)
-         {
-             $data = trim($data);
-             $data = stripslashes($data);
-             $data = htmlspecialchars($data);
-             return $data;
-         }
-    }
-
-    
-    // Calling validation function.
-    $fname = checkValidation($_POST['fname'], $fnameErr);
-    $lname = checkValidation($_POST['lname'], $lnameErr);
-
-    /* Making the person class. */
-    class Person
-    {
-        /*
-        Creating variable.
-        fname for first name.
-        lname for last name.
-        */
-        public $fname;
-        public $lname;
-
-        /* Setting First name. */
-        function set_firstName($fname)
-        {
-            $this->fname = $fname;
-        }
-
-        /* Setting Last name. */
-        function set_lastName($lname)
-        {
-            $this->lname = $lname;
-        }
-
-        /* Getting First name. */
-        function get_firstName()
-        {
-            return $this->fname;
-        }
-
-        /* Getting Last name. */
-        function get_lastName()
-        {
-            return $this->lname;
-        }
-    }
-
-    $person = new Person();
-    $person->set_firstName($fname);
-    $person->set_lastName($lname);
-    
-    ?>
-
     <div class="container">
-
-        <div class="card mt-5">
-            <div class="card-header">
-                Personal Details.
-            </div>
-            <!-- After given input, The message will be show. -->
-            <h3 class="mt-3 ms-3">Hello, <?php echo "{$person->get_firstName()} {$person->get_lastName()}"; ?></h3>
-            <div class="card-body">
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <!-- Input field for first name. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">First name
-                            <span class="error">*<?php echo "$fnameErr" ?><span>
+        <div class="row d-flex justify-content-center my-5">
+            <h1 class="text-center my-2"><?php echo $message;?></h1>
+            <div class="col-6">
+                <form class="row g-3 needs-validation" novalidate action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+                    <div class="col-md-8">
+                        <label for="validationCustom01" class="form-label">First name
+                            <span class="error">* <?php echo $fnameErr;?></span>
                         </label>
-                        <input type="text" class="form-control" id="" aria-describedby="" name="fname" required value="<?php echo $_POST['fname']; ?>" minlength="3" maxlength="20">
+                        <input type="text" class="form-control" id="validationCustom01" name="fname" pattern="/^[a-zA-Z-' ]*$/" value="<?php echo $_POST['fname'];?>" minlength="3" maxlength="20" required >
                     </div>
-
-                    <!-- Input field for last name. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">Last name
-                            <span class="error">*<?php echo "$lnameErr" ?><span>
+                    <div class="col-md-8">
+                        <label for="validationCustom02" class="form-label">Last name
+                            <span class="error">* <?php echo $lnameErr;?></span>
                         </label>
-                        <input type="text" class="form-control" id="" aria-describedby="" name="lname" required value="<?php echo $_POST['lname']; ?>" minlength="3" maxlength="20">
+                        <input type="text" class="form-control" id="validationCustom02" name="lname" pattern="/^[a-zA-Z-' ]*$/" value="<?php echo $_POST['lname'];?>" minlength="3" maxlength="20" required>
                     </div>
-
-                    <!-- Input field for full name. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">Full name
-                            <span class="error"><?php echo !empty($_POST['fullName'])?$fullNameErr:""; ?><span>
-                        </label> 
-                        <input type="text" class="form-control" id="" aria-describedby="" name="fullName" value="<?php echo "{$fname} {$lname}" ?>" disabled>
+                    <div class="col-md-8">
+                        <label for="validationCustom02" class="form-label">Full name
+                            <span class="error"><?php echo $fullNameErr;?></span>
+                        </label>
+                        <input type="text" class="form-control" id="validationCustom02" name="fullName" value="<?php echo "{$_POST['fname']} {$_POST['lname']}";?>" disabled>
                     </div>
-
-                    <!-- Input field of type submit. -->
-                    <input type="submit" class="btn btn-primary">
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit" >Submit form</button>
+                    </div>
                 </form>
             </div>
         </div>
-    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
