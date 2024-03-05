@@ -31,11 +31,18 @@
             if (empty($data)) {
                 $errorMsg = "This field is required";
             } 
-            else if (!preg_match("/^[a-zA-Z-' ]*$/", $data)) {
-                $errorMsg = "Only letters are allowed.";
-            } 
-            else {
-                return test_input($data);
+            else{
+                $name = test_input($data);
+                if(empty($name)){
+                    $errorMsg = "Invalid input.";
+                }
+
+                if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
+                    $errorMsg = "Only letters are allowed.";
+                } 
+                else {
+                    return $name;
+                }
             }
         }
 
@@ -54,31 +61,36 @@
     $fname = checkValidation($_POST['fname'], $fnameErr);
     $lname = checkValidation($_POST['lname'], $lnameErr);
 
-    // Making the person class.
+    /* Making the person class. */
     class Person
     {
+        /*
+        Creating variable.
+        fname for first name.
+        lname for last name.
+        */
         public $fname;
         public $lname;
 
-        // Setting First name.
+        /* Setting First name. */
         function set_firstName($fname)
         {
             $this->fname = $fname;
         }
 
-        // Setting Last name.
+        /* Setting Last name. */
         function set_lastName($lname)
         {
             $this->lname = $lname;
         }
 
-        // Getting First name.
+        /* Getting First name. */
         function get_firstName()
         {
             return $this->fname;
         }
 
-        // Getting Last name.
+        /* Getting Last name. */
         function get_lastName()
         {
             return $this->lname;
@@ -97,7 +109,7 @@
             <div class="card-header">
                 Personal Details.
             </div>
-            <!-- After given input, The message will be show -->
+            <!-- After given input, The message will be show. -->
             <h3 class="mt-3 ms-3">Hello, <?php echo "{$person->get_firstName()} {$person->get_lastName()}"; ?></h3>
             <div class="card-body">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
@@ -113,7 +125,6 @@
                     <div class="mb-3">
                         <label for="" class="form-label">Last name
                             <span class="error">*<?php echo "$lnameErr" ?><span>
-
                         </label>
                         <input type="text" class="form-control" id="" aria-describedby="" name="lname" required value="<?php echo $_POST['lname']; ?>" minlength="3" maxlength="20">
                     </div>
@@ -121,7 +132,7 @@
                     <!-- Input field for full name. -->
                     <div class="mb-3">
                         <label for="" class="form-label">Full name
-                        <span class="error"><?php echo !empty($_POST['fullName'])?$fullNameErr:""; ?><span>
+                            <span class="error"><?php echo !empty($_POST['fullName'])?$fullNameErr:""; ?><span>
                         </label> 
                         <input type="text" class="form-control" id="" aria-describedby="" name="fullName" value="<?php echo "{$fname} {$lname}" ?>" disabled>
                     </div>
