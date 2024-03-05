@@ -6,19 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
 </head>
-<style>
-    .error {
-        color: red;
-    }
-</style>
+
 
 <body>
 
     <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    /*
+    These varible contains the error message.
+    fnameErr for first name error.
+    lnameErr for last name error.
+    fullNameErr for full name error.
+    */
         $fnameErr = $lnameErr ="";
         $fullNameErr = "Invalid input.";
+        
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
 
         // Validating Input data.
         function checkValidation($data, &$errorMsg)
