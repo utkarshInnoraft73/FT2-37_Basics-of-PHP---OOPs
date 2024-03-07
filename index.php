@@ -2,7 +2,7 @@
 // Importing the file user.php.
 require("./user.php");
 /**
- * The patter for name field.
+ * The pattern for name field.
  */
 const PATTERN = "/^[a-zA-Z-' ]*$/";
 
@@ -75,6 +75,7 @@ $user = new User($fname, $lname);
     <title>Assignment 1</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <script src="Index.js"></script>
 </head>
 
 <body>
@@ -82,16 +83,16 @@ $user = new User($fname, $lname);
         <div class="row d-flex justify-content-center my-5">
             <h1 class="text-center my-2"><?php echo $message;?></h1>
             <div class="col-6">
-                <form class="row g-3 needs-validation" novalidate action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+                <form class="row g-3 needs-validation" novalidate action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" onsubmit="return checkInputs()">
                     <div class="col-md-8">
-                        <label for="validationCustom01" class="form-label">First name
-                            <span class="error">* <?php echo $fnameErr;?></span>
+                        <label for="validationCustom01" class="form-label" >First name
+                            <span class="error" id="fnameErr">* <?php echo $fnameErr;?></span>
                         </label>
                         <input type="text" class="form-control" id="validationCustom01" name="fname" pattern="/^[a-zA-Z-' ]*$/" value="<?php echo $_POST['fname'];?>" minlength="3" maxlength="20" required >
                     </div>
                     <div class="col-md-8">
                         <label for="validationCustom02" class="form-label">Last name
-                            <span class="error">* <?php echo $lnameErr;?></span>
+                            <span class="error" id="lnameErr">* <?php echo $lnameErr;?></span>
                         </label>
                         <input type="text" class="form-control" id="validationCustom02" name="lname" pattern="/^[a-zA-Z-' ]*$/" value="<?php echo $_POST['lname'];?>" minlength="3" maxlength="20" required>
                     </div>
