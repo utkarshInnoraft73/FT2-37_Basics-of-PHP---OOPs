@@ -17,8 +17,6 @@ class User {
         $this->lname = $lname;
        
     }
-
-
     
     /**
      * Create functions to return the first name, last name.
@@ -32,7 +30,5 @@ class User {
     {
         return $this->lname;
     }
-
-   
 }
 ?>

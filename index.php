@@ -8,27 +8,25 @@ require("user.php");
     */
 $fnameErr = $lnameErr = $txteraErr = "";
 
-/*
-    Function for Validation.
-    nameValidation for validating name.
-    */
+    /**
+     * Function to validate the number.
+     * Params, data(user input) and errorMsg(empty string for setting the field error.).
+     * return data after validating.
+     */
 function nameValidation($data, &$errorMsg)
 {
     if (empty($data)) {
         $errorMsg = "This field is required";
         return "";
-    } 
-    else {
+    } else {
         $name = test_input($data);
         if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
             $errorMsg = "Only letters are allowed.";
             return "";
-        } 
-        else if (empty($name)) {
+        } else if (empty($name)) {
             $errorMsg = "Invalid Input.";
             return "";
-        } 
-        else {
+        } else {
             return $name;
         }
     }
@@ -60,15 +58,15 @@ function test_input($data)
     return $data;
 }
 
-// Message to show after successfull submit the form 
-if (!empty($fname) && !empty($lname)) {
-    $message = "Hello, {$fname} {$lname}.";
-}
-
 
 $user = new User($fname, $lname);
+// Message to show after successfull submit the form 
+if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
+    $message = "Hello, {$user->getFirstName()} {$user->getLastName()}.";
+}
 ?>
 
+<!-- HTML start from here.-->
 <!doctype html>
 <html lang="en">
 
@@ -86,13 +84,16 @@ $user = new User($fname, $lname);
         <div class="row d-flex justify-content-center my-5">
             <h1 class="text-center my-2"><?php echo $message; ?></h1>
             <div class="col-6">
-                <form class="row g-3 needs-validation" action="<?php echo $_SERVER['PHP_SELF']; ?>" m ethod="post" enctype="multipart/form-data" onsubmit="return checkInputs()">
-                    <div class="col-md-8">
+                <form class="row g-3 needs-validation" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" onsubmit="return checkInputs()">
+                    <!-- Field to take input of first name. -->
+                <div class="col-md-8">
                         <label for="validationCustom01" class="form-label">First name
                             <span class="require" id="fnameErr">*</span>
                         </label>
                         <input type="text" class="form-control item" id="fname" name="fname" value="" minlength="3" maxlength="20" required>
                     </div>
+
+                    <!-- Field to take input of last name. -->
                     <div class="col-md-8">
                         <label for="validationCustom02" class="form-label">Last name
                             <span class="require" id="lnameErr">*</span>
@@ -100,11 +101,14 @@ $user = new User($fname, $lname);
                         <input type="text" class="form-control item" id="lname" name="lname" value="" minlength="3" maxlength="20" required>
                     </div>
 
+                    <!-- Field to take input of image -->
                     <div class="col-md-8">
                         <label for="validationCustom02" class="form-label">Upload image
                         </label>
                         <input type="file" class="form-control item" name="image" accept="image/*" required>
                     </div>
+
+                    <!-- Field to take input of subject marks pair. -->
                     <div class="col-md-8">
                         <label for="floatingTextarea2">Subject marks (Format: Subject|Marks)
                             <span class="require" id="marksErr">*</span>
@@ -121,15 +125,57 @@ $user = new User($fname, $lname);
             <div style="width: 100% !important;">
                 <?php
                 if (!empty($imgName)) { ?>
-                    <img src="<?php echo 'Uploads/{$imgName}'; ?>" height='400' width='400' style='display: block; margin: auto;'>
+                    <img src="<?php echo 'Uploads/$imgName'; ?>" height='400' width='400' style='display: block; margin: auto;'>
                     <h4 style='margin: 10px 0; text-align:center;'><?php echo "{$user->getFirstName()} {$user->getLastName()}"; ?></h4>
                 <?php
                 }
                 ?>
             </div>
+
+            <!-- Printing the table. -->
+            <div>
+                <h4 style="margin: 10px 0; text-align:center;"> Entered Marks</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">#</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Marks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $i = 1;
+                        foreach ($marks_lines as $lines) {
+
+                            // Exploding marks_line as subject and marks seperating by "|".
+                            $parts = explode("|", $lines);
+                            if (is_numeric(trim($parts[0])) && is_numeric(trim($parts[1])) || (empty(trim($parts[0])) || empty(trim($parts[1])))) {
+                                return "";
+                            } 
+                            else if (is_numeric(trim($parts[0]))) {
+                                $mark = trim($parts[0]);
+                                $subject = trim($parts[1]);
+                            }
+                            else {
+                                $subject = trim($parts[0]);
+                                $mark = trim($parts[1]);
+                            }
+                        ?>
+                            <tr>
+                                <td><?php echo $i; ?></td>
+                                <td><?php echo $subject; ?></td>
+                                <td><?php echo $mark; ?></td>
+                            </tr>
+                        <?php
+                            $i = $i + 1;
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
-
 </html>
