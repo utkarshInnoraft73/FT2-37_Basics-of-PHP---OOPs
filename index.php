@@ -75,7 +75,7 @@ $user = new User($fname, $lname);
     <title>Assignment 1</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <script src="Index.js"></script>
+    <script src="index.js"></script>
 </head>
 
 <body>
@@ -85,22 +85,22 @@ $user = new User($fname, $lname);
             <div class="col-6">
                 <form class="row g-3 needs-validation" novalidate action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" onsubmit="return checkInputs()">
                     <div class="col-md-8">
-                        <label for="validationCustom01" class="form-label" >First name
+                        <label for="fname" class="form-label" >First name
                             <span class="error" id="fnameErr">* <?php echo $fnameErr;?></span>
                         </label>
-                        <input type="text" class="form-control" id="validationCustom01" name="fname" pattern="/^[a-zA-Z-' ]*$/" value="<?php echo $_POST['fname'];?>" minlength="3" maxlength="20" required >
+                        <input type="text" class="form-control" id="fname" name="fname" value="<?php echo $_POST['fname'];?>" minlength="3" maxlength="20" required >
                     </div>
                     <div class="col-md-8">
-                        <label for="validationCustom02" class="form-label">Last name
+                        <label for="lname" class="form-label">Last name
                             <span class="error" id="lnameErr">* <?php echo $lnameErr;?></span>
                         </label>
-                        <input type="text" class="form-control" id="validationCustom02" name="lname" pattern="/^[a-zA-Z-' ]*$/" value="<?php echo $_POST['lname'];?>" minlength="3" maxlength="20" required>
+                        <input type="text" class="form-control" id="lname" name="lname" value="<?php echo $_POST['lname'];?>" minlength="3" maxlength="20" required>
                     </div>
                     <div class="col-md-8">
-                        <label for="validationCustom02" class="form-label">Full name
+                        <label for="fullName" class="form-label">Full name
                             <span class="error"><?php echo $fullNameErr;?></span>
                         </label>
-                        <input type="text" class="form-control" id="validationCustom02" name="fullName" value="<?php echo "{$_POST['fname']} {$_POST['lname']}";?>" disabled>
+                        <input type="text" class="form-control" id="fullName" name="fullName" value="<?php echo "{$_POST['fname']} {$_POST['lname']}";?>" disabled>
                     </div>
                     <div class="col-12">
                         <button class="btn btn-primary" type="submit" >Submit form</button>
