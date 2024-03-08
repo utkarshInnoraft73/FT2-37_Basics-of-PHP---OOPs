@@ -167,7 +167,7 @@ require("user.php");
                     <!-- Field to take input of subject marks pair. -->
                     <div class="col-md-8">
                         <label for="marks">Subject marks (Format: Subject|Marks)
-                            <span class="require" id="marksErr">*</span>
+                            <span class="require" id="marksErr">*<?php echo $txteraErr;?></span>
                         </label>
                         <div class="form-floating">
                             <textarea class="form-control" id="marks" style="height: 100px" name="marks" value="<?php echo $_SERVER['marks'];?>" required></textarea>
@@ -206,11 +206,12 @@ require("user.php");
                             // Exploding marks_line as subject and marks seperating by "|".
                             $parts = explode("|", $lines);
                             if (is_numeric(trim($parts[0])) && is_numeric(trim($parts[1])) || (empty(trim($parts[0])) || empty(trim($parts[1])))) {
-                                return "";
+                                $txteraErr = "Invalid input, please enter given format.";
+                                return;
                             } 
-                            else if (is_numeric(trim($parts[0]))) {
-                                $mark = trim($parts[0]);
-                                $subject = trim($parts[1]);
+                            else if (is_numeric(trim($parts[0]))|| !is_numeric(trim($parts[0]))) {
+                                $txteraErr = "Invalid input, please enter given format.";
+                                return;
                             }
                             else {
                                 $subject = trim($parts[0]);
