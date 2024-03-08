@@ -101,7 +101,7 @@ $user = new User($fname, $lname);
                         <label for="validationCustom02" class="form-label">Last name
                         <span class="require" id="lnameErr">*</span>
                         </label>
-                        <input type="text" class="form-control item" id="lname" name="lname"  value="" minlength="3" maxlength="20" required>
+                        <input type="text" class="form-control item" id="lname" name="lname" accept="image/*"  value="" minlength="3" maxlength="20" required>
                     </div>
                     <div class="col-md-8">
                         <label for="validationCustom02" class="form-label">Upload image
@@ -114,7 +114,7 @@ $user = new User($fname, $lname);
                 </form>
             </div>
 
-            <div style="width: 100% !important;">
+            <div class="mt-2" style="width: 100% !important;">
                 <?php
                 if (!empty($imgName)) { ?>
                     <img src="Uploads/<?php echo $imgName; ?>" height='400' width='400' style='display: block; margin: auto;'>
