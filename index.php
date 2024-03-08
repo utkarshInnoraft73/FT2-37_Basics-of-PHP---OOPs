@@ -6,7 +6,7 @@ require("user.php");
     lnameErr = for last name error.
     txteraErr = for textarea error.
     */
-$fnameErr = $lnameErr = $phoneErr = "";
+$fnameErr = $lnameErr = $phoneErr = $textErr = "";
 /**
  * Function to validate the number.
  * Params, data(user input) and errorMsg(empty string for setting the field error.).
@@ -77,11 +77,12 @@ function test_input($data)
     return $data;
 }
 
-$user = new User($fname, $lname);
+$user = new User($fname, $lname, $phone);
 
 // Message to show after successfull submit the form 
 if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
     $message = "Hello, {$user->getFirstName()} {$user->getLastName()}.";
+    $phoneNumber ="Your phone no.: {$user->getPhone()}";
 }
 ?>
 <!-- HTML start from here.-->
@@ -101,6 +102,7 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
     <div class="container">
         <div class="row d-flex justify-content-center my-5">
             <h1 class="text-center my-2"><?php echo $message; ?></h1>
+            <p class="text-center my-2"><?php echo $phoneNumber; ?></p>
             <div class="col-6">
                 <form class="row g-3 needs-validation" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data" onsubmit="return checkInputs()">
                     <!-- Field to take input of first name. -->
@@ -147,7 +149,7 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
                     </div>
                 </form>
             </div>
-            <div style="width: 100% !important;">
+            <div style="width: 100% !important;" class="mt-2">
                 <?php
                 if (!empty($imgName)) { ?>
                     <img src="./Uploads/<?php echo $imgName;?>" height='400' width='400' style='display: block; margin: auto;'>
@@ -175,11 +177,12 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
                             // Exploding marks_line as subject and marks seperating by "|".
                             $parts = explode("|", $lines);
                             if (is_numeric(trim($parts[0])) && is_numeric(trim($parts[1])) || (empty(trim($parts[0])) || empty(trim($parts[1])))) {
+                                $textErr = "Invalid input, Please enter given format.";
                                 return "";
                             } 
-                            else if (is_numeric(trim($parts[0]))) {
-                                $mark = trim($parts[0]);
-                                $subject = trim($parts[1]);
+                            else if (is_numeric(trim($parts[0])) || !is_numeric(trim($parts[0]))) {
+                                $textErr = "Invalid input, Please enter given format.";
+                                return;
                             }
                             else {
                                 $subject = trim($parts[0]);

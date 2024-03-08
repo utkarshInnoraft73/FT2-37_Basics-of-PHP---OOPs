@@ -10,17 +10,17 @@ class User {
 
     /**
      * Create a custructor.
-     * Setting first name, last name, email and phone.
+     * Setting first name, last name and phone.
      */
-    function __construct($fname, $lname)
+    function __construct($fname, $lname, $phone)
     {
         $this->fname = $fname;
         $this->lname = $lname;
-        // $this->phone = $phone;
+        $this->phone = $phone;
     }
 
     /**
-     * Create functions to return the first name, last name, email and phone number.
+     * Create functions to return the first name, last name and phone number.
      */
     function getFirstName()
     {
@@ -32,9 +32,9 @@ class User {
         return $this->lname;
     }
 
-    // function getPhone()
-    // {
-    //     return $this->phone;
-    // }
+    function getPhone()
+    {
+        return $this->phone;
+    }
 }
 ?>
