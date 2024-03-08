@@ -151,12 +151,14 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
                             // Exploding marks_line as subject and marks seperating by "|".
                             $parts = explode("|", $lines);
                             if (is_numeric(trim($parts[0])) && is_numeric(trim($parts[1])) || (empty(trim($parts[0])) || empty(trim($parts[1])))) {
-                                return "";
+                                $txteraErr = "Invalid Input, please enter valid pattern.";
+                                return;
                             } 
-                            else if (is_numeric(trim($parts[0]))) {
-                                $mark = trim($parts[0]);
-                                $subject = trim($parts[1]);
+                            else if (is_numeric(trim($parts[0])) || !is_numeric(trim($parts[1]))) {
+                                $txteraErr = "Invalid Input";
+                                return;
                             }
+                            
                             else {
                                 $subject = trim($parts[0]);
                                 $mark = trim($parts[1]);

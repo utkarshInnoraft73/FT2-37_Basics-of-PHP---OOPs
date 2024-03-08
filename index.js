@@ -7,8 +7,6 @@ function checkInputs(){
     var fname = document.getElementById("fname").value; // Store the first name.
     var lname = document.getElementById("lname").value; // Store the last name.
     var marks = document.getElementById("marks").value.trim(); // Store the subject marks pair.
-    var errMsg = document.getElementById("errMsg"); // Access the paragraph where error message will be shown.
-
     var fnameErr = document.getElementById("fnameErr"); // Store the first name error.
     var lnameErr = document.getElementById("lnameErr"); // Store the last name error.
     var marksErr = document.getElementById("marksErr"); // Store the phone number error.
