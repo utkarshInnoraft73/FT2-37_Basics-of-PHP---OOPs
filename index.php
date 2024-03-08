@@ -1,16 +1,5 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <?php
+<?php
+require("user.php");
     /*
     Variable for error message.
     fnameErr = for first name error.Invalid Input.
@@ -56,14 +45,14 @@
             $errorMsg = "This field is required.";
         } 
          
-        else if (!preg_match("/^[1-9][0-9]{9}$/", $data)) {
+        else if (!preg_match("/^(\+91)[1-9][0-9]{9}$/", $data)) {
             $errorMsg = "Invalid input.";
         } 
-        else if (strlen($data) != 10) {
+        else if (strlen($data) != 13) {
             $errorMsg = "Number will be of 10 digits.";
         } 
         else {
-            return "+91 $data";
+            return "$data";
         }
     }
     function emailValidation($data, &$errorMsg, &$emailSts)
@@ -110,126 +99,95 @@
         return $data;
     }
 
-    /* Making the person class. */
-    class Person
-    {
-        /* Create the public variables.
-        fname for first name.
-        lname for last name.
-        phone for phone number.
-        */
-        public $fname;
-        public $lname;
-        public $phone;
+    $user = new User($fname, $lname, $phone, $email);
 
-        /* Creating the cunstructor */
-        function __construct(string $fname, string $lname, string $phone)
-        {
-            $this->fname = $fname;
-            $this->lname = $lname;
-            $this->phone = $phone;
-        }
-
-        /* Getting First name. */
-        function getFirstName()
-        {
-            return $this->fname;
-        }
-
-        /* Getting Last name. */
-        function getLastName()
-        {
-            return $this->lname;
-        }
-
-        /* Getting Phone number. */
-        function getPhone()
-        {
-            return $this->phone;
-        }
+    // Message to show after successfull submit the form.
+    if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
+        $message = "Hello, {$user->getFirstName()} {$user->getLastName()}.";
     }
 
-    $person = new Person($fname, $lname, $phone);
+?>
 
-    ?>
 
-    <div class="container py-5">
+<!doctype html>
+<html lang="en">
 
-        <div class="card mt-5">
-            <div class="card-header">
-                Personal Details.
-            </div>
-            <!-- After given input, The message will be show. -->
-            <?php
-            // if(!empty($fname) && !empty($lname)) {
-            ?>
-            <h3 class="mt-3 ms-3">Hello, <?php echo "{$person->getFirstName()} {$person->getLastName()}"; ?></h3>
-            <?php 
-        // }
-        ?>
-            <h3 class="mt-3 ms-3">Phone: <?php echo "{$person->getPhone()}"; ?></h3>
-            <div class="card-body">
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="index.js"></script>
+</head>
 
-                    <!-- Input field for First name. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">First name
-                            <span class="error">*<?php echo "{$fnameErr}" ?><span>
+<body>
+<div class="container">
+        <div class="row d-flex justify-content-center my-5">
+            <h1 class="text-center my-2"><?php echo $message; ?></h1>
+            <div class="col-6">
+                <form class="row g-3 needs-validation" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data" onsubmit="return checkInputs()">
+                    <!-- Field to take input of first name. -->
+                <div class="col-md-8">
+                        <label for="fname" class="form-label">First name
+                            <span class="require" id="fnameErr">* <?php echo "$fnameErr";?></span>
                         </label>
-                        <input type="text" class="form-control" aria-describedby="" name="fname" required minlength="3" maxlength="20" value="<?php echo $_POST['fname']; ?>">
+                        <input type="text" class="form-control item" id="fname" name="fname" value="<?php echo $_SERVER['fname'];?>" minlength="3" maxlength="20" required>
                     </div>
 
-                    <!-- Input field for Last name. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">Last name
-                            <span class="error">*<?php echo "{$lnameErr}" ?><span>
+                    <!-- Field to take input of last name. -->
+                    <div class="col-md-8">
+                        <label for="lname" class="form-label">Last name
+                            <span class="require" id="lnameErr">* <?php echo "$lnameErr";?></span>
                         </label>
-                        <input type="text" class="form-control" aria-describedby="" name="lname" required  maxlength="20" value="<?php echo $_POST['lname']; ?>">
+                        <input type="text" class="form-control item" id="lname" name="lname" value="<?php echo $_SERVER['lname'];?>" minlength="3" maxlength="20" required>
                     </div>
-
-                    <!-- Input field for Email. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">Email
-                            <span class="error">*<?php echo "{$emailErr}" ?><span>
+                    <!-- Field to take input of phone. -->
+                    <div class="col-md-8">
+                        <label for="phone" class="form-label">Phone
+                            <span class="require" id="phoneErr">* <?php echo "$phoneErr";?></span>
                         </label>
-                        <input type="text" class="form-control" aria-describedby="" name="email" required maxlength="40" value="<?php echo $_POST['email']; ?>">
-                        <span class="success"><?php echo "{$emailSts}" ?><span>
-
+                        <input type="text" class="form-control item" id="phone" name="phone" value="<?php echo $_SERVER['phone'];?>" maxlength="13" required>
                     </div>
-
-                    <!-- Input field for phone number. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">Phone no.(eg: 1234567890)
-                            <span class="error">*<?php echo "{$phoneErr}" ?><span>
+                    <!-- Field to take input of email. -->
+                    <div class="col-md-8">
+                        <label for="email" class="form-label">Email
+                            <span class="require" id="emailErr">* <?php echo "$emailErr";?></span>
                         </label>
-                        <input type="tel" class="form-control" aria-describedby="" name="phone" required maxlength="10" value="<?php echo $_POST['phone']; ?>">
+                        <input type="text" class="form-control item" id="email" name="email" value="<?php echo $_SERVER['email'];?>" maxlength="40" required>
                     </div>
 
-                    <!-- Input field for image. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">Upload image</label>
-                        <input type="file" class="form-control" aria-describedby="" name="image" accept="image/*">
-                    </div>
-
-                    <!-- Input field for Subject and marks. -->
-                    <div class="mb-3">
-                        <label for="" class="form-label">Subject and marks (ex: English|80)
-                            
+                    <!-- Field to take input of image -->
+                    <div class="col-md-8">
+                        <label for="image" class="form-label">Upload image
                         </label>
-                        <textarea type="text" class="form-control" aria-describedby="" name="marks" rows="4" cols="" value="<?php echo $_POST['marks']; ?>"></textarea>
+                        <input type="file" class="form-control item" id="image" name="image" accept="image/*" required>
                     </div>
-                    <input type="submit" class="btn btn-primary">
+
+                    <!-- Field to take input of subject marks pair. -->
+                    <div class="col-md-8">
+                        <label for="marks">Subject marks (Format: Subject|Marks)
+                            <span class="require" id="marksErr">*</span>
+                        </label>
+                        <div class="form-floating">
+                            <textarea class="form-control" id="marks" style="height: 100px" name="marks" value="<?php echo $_SERVER['marks'];?>" required></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <input type="submit" name="submit">
+                    </div>
                 </form>
             </div>
             <div style="width: 100% !important;">
                 <?php
                 if (!empty($imgName)) { ?>
-                    <img src="<?php echo 'Uploads/{$imgName}'; ?>" height='400' width='400' style='display: block; margin: auto;'>
-                    <h4 style='margin: 10px 0; text-align:center;'><?php echo "{$person->getFirstName()} {$person->getLastName()}"; ?></h4>";
+                    <img src="./Uploads/<?php echo $imgName;?>" height='400' width='400' style='display: block; margin: auto;'>
                 <?php
                 }
                 ?>
             </div>
+
+            <!-- Printing the table. -->
             <div>
                 <h4 style="margin: 10px 0; text-align:center;"> Entered Marks</h4>
                 <table class="table table-hover">
@@ -248,17 +206,16 @@
                             // Exploding marks_line as subject and marks seperating by "|".
                             $parts = explode("|", $lines);
                             if (is_numeric(trim($parts[0])) && is_numeric(trim($parts[1])) || (empty(trim($parts[0])) || empty(trim($parts[1])))) {
-                                // $txteraErr = "Invalid Input.";
-                                // echo "global $txteraErr";
                                 return "";
-                            } else if (is_numeric(trim($parts[0]))) {
+                            } 
+                            else if (is_numeric(trim($parts[0]))) {
                                 $mark = trim($parts[0]);
                                 $subject = trim($parts[1]);
-                            } else {
+                            }
+                            else {
                                 $subject = trim($parts[0]);
                                 $mark = trim($parts[1]);
                             }
-
                         ?>
                             <tr>
                                 <td><?php echo $i; ?></td>
@@ -274,8 +231,6 @@
             </div>
         </div>
     </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </body>
