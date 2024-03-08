@@ -5,66 +5,30 @@ require("./user.php");
  * The pattern for name field.
  */
 const PATTERN = "/^[a-zA-Z-' ]*$/";
+$errors = [];
 
 /**
- * For error messages.
- * fnameErr for first name error.
- * lnameErr for last name error.
- * fullNameErr for full name error.
+ * Make a instace of class user.
  */
-$fnameErr = $lnameErr = $fullNameErr = "";
+$user = new User();
+
 
 /**
- * Method to check the inputs.
+ * Check if method is post or not.
  */
-function testInput($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-
-    return $data;
-}
-
-/**
- * Creating the method for validating the fist name and last name.
- */
-function nameValidation($data, &$errorMsg)
-{
-    if (empty($data)) {
-        $errorMsg = "This is required field.";
-        return "";
-    } else {
-        $name = testInput($data);
-        if (!preg_match(PATTERN, $name)) {
-            $errorMsg = "Invalid input.";
-            return "";
-        } else if (empty($name)) {
-            $errorMsg = "Invalid input.";
-            return "";
-        } else {
-            return $name;
-        }
-    }
-}
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $fname = nameValidation($_POST['fname'], $fnameErr);
-    $lname = nameValidation($_POST['lname'], $lnameErr);
-
-    if(!empty($_POST['fullName'])){
-        $fullNameErr = "This field is not editable.";
-    }
+    $fname = User::testInput($_POST['fname']);
+    $lname = User::testInput($_POST['lname']);
+    $fname = $user->nameValidate($fname, PATTERN, 'fname');
+    $lname = $user->nameValidate($lname, PATTERN, 'lname');
+    $errors = $user->getError();
 }
 
 // Message to show after successfull submit the form 
 if(!empty($fname) && !empty($lname)){
     $message = "Hello, {$fname} {$lname}."; 
 }
-
-$user = new User($fname, $lname);
 ?>
 <!doctype html>
 <html lang="en">
@@ -75,7 +39,7 @@ $user = new User($fname, $lname);
     <title>Assignment 1</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
 </head>
 
 <body>
@@ -86,13 +50,13 @@ $user = new User($fname, $lname);
                 <form class="row g-3 needs-validation" novalidate action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" onsubmit="return checkInputs()">
                     <div class="col-md-8">
                         <label for="fname" class="form-label" >First name
-                            <span class="error" id="fnameErr">* <?php echo $fnameErr;?></span>
+                            <span class="error" id="fnameErr">* <?php echo $errors['fname'];?></span>
                         </label>
                         <input type="text" class="form-control" id="fname" name="fname" value="<?php echo $_POST['fname'];?>" minlength="3" maxlength="20" required >
                     </div>
                     <div class="col-md-8">
                         <label for="lname" class="form-label">Last name
-                            <span class="error" id="lnameErr">* <?php echo $lnameErr;?></span>
+                            <span class="error" id="lnameErr">* <?php echo $errors['lname'];?></span>
                         </label>
                         <input type="text" class="form-control" id="lname" name="lname" value="<?php echo $_POST['lname'];?>" minlength="3" maxlength="20" required>
                     </div>
