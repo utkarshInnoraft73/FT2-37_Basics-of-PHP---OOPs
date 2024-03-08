@@ -1,0 +1,12 @@
+{
+    "name": "innoraft/basics-of-php-oo-ps",
+    "authors": [
+        {
+            "name": "utkarshInnoraft73",
+            "email": "utkarsh.singh@innoraft.com"
+        }
+    ],
+    "require": {
+        "fpdf/fpdf": "^1.86"
+    }
+}
