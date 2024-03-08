@@ -103,7 +103,6 @@ $user = new User($fname, $lname);
                         </label>
                         <input type="text" class="form-control item" id="lname" name="lname"  value="" minlength="3" maxlength="20" required>
                     </div>
-                    
                     <div class="col-md-8">
                         <label for="validationCustom02" class="form-label">Upload image
                         </label>

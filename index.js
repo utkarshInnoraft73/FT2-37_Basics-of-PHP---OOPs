@@ -5,8 +5,6 @@
 function checkInputs(){
     var fname = document.getElementById("fname").value; // Store the first name.
     var lname = document.getElementById("lname").value; // Store the last name.
-    var errMsg = document.getElementById("errMsg"); // Access the paragraph where error message will be shown.
-
     var fnameErr = document.getElementById("fnameErr"); // Store the first name error.
     var lnameErr = document.getElementById("lnameErr"); // Store the last name error.
     
