@@ -125,7 +125,7 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
             <div style="width: 100% !important;">
                 <?php
                 if (!empty($imgName)) { ?>
-                    <img src="<?php echo 'Uploads/$imgName'; ?>" height='400' width='400' style='display: block; margin: auto;'>
+                    <img src="Uploads/<?php echo $imgName; ?>" height='400' width='400' style='display: block; margin: auto;'>
                     <h4 style='margin: 10px 0; text-align:center;'><?php echo "{$user->getFirstName()} {$user->getLastName()}"; ?></h4>
                 <?php
                 }
