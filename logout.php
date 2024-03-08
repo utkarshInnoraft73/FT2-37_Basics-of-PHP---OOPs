@@ -1,11 +1,14 @@
 <?php
 session_start();
-if(isset($_SESSION['userName'])){
-    session_unset();
+
+if (isset($_GET['logout']) && $_GET['logout'] == true) {
+    $_SESSION = array();
+    
+    // Destroy the session
     session_destroy();
-    header("location: index.php");
-}
-else {
-    header("location: index.php");
+
+    // Redirect to the login page after logout
+    header('Location: index.php');
+    exit;
 }
 ?>
