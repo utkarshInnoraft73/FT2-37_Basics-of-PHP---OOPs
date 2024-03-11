@@ -1,0 +1,68 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root{
+    --primary-color : #FF7900;
+    --secondary-color: #4B5561;
+}
+*{
+    font-family: "Poppins", sans-serif;
+}
+.container{
+    width: 1200px;
+    margin: auto;
+}
+.d-flex{
+    display: flex;
+}
+.justify-content-center{
+    justify-content: space-around;
+}
+.align-item-center{
+    align-items: center;
+}
+.flex-col{
+    flex-direction: column;
+}
+.itemLinks{
+    width: 45%;
+}
+.itemImg{
+    width: 45%;
+}
+.btn{
+    padding: 10px 25px;
+    text-decoration: none;
+    color: var(--secondary-color);
+    border:2px solid var(--primary-color);
+    border-radius: 5px;
+}
+
+.service-title{
+    font-size: 50px;
+    color: var(--primary-color);
+    text-align: left;
+}
+.service-secondary-title{
+    font-size: 40px;
+    color: #4B5561;
+    text-align: left;
+}
+ul{
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+    padding: 0 21px !important;
+    
+}
+ul li{
+   list-style: circle;
+}
+ul li::marker{
+    list-style: circle;
+    font-size: 30px;
+    color: var(--primary-color);
+}
+ul li a{
+    color: var(--secondary-color);
+    text-decoration: none;
+}
