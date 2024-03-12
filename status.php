@@ -1,23 +1,26 @@
 <?php
 
-//Import PHPMailer classes into the global namespace
-//These must be at the top of your script, not inside a function
+/**
+ * Import PHPMailer classes into the global namespace.
+ */
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-//Load Composer's autoloader
+/*
+ * Load Composer's autoloader.
+ */
 require 'vendor/autoload.php';
 
 $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    //Create an instance; passing `true` enables exceptions
+    /**
+     * Create the instance of PHPMailer class.
+     */
     $mail = new PHPMailer(true);
 
     try {
         //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                    //Enable verbose debug output
         $mail->isSMTP();                                          //Send using SMTP
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                 //Enable SMTP authentication
@@ -26,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;          //Enable implicit TLS encryption
         $mail->Port       = 465;                                  //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-        //Recipients
+        //Recipients.
         $mail->setFrom('utkarshsingh737091@gmail.com', 'Mailer');
         $mail->addAddress($_POST['email']); //Add a recipient
 
@@ -45,7 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (empty($error)) {
     $message = "The message is sent successfull, Please check your inbox.";
     $className = "text-success";
-} else {
+} 
+else {
     $message = $error;
     $className = "text-danger";
 }

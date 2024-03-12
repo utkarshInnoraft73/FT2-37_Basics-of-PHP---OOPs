@@ -1,4 +1,16 @@
 {
+    "name": "innoraft/basics-of-php-oo-ps",
+    "autoload": {
+        "psr-4": {
+            "Innoraft\\BasicsOfPhpOoPs\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "utkarshInnoraft73",
+            "email": "utkarsh.singh@innoraft.com"
+        }
+    ],
     "require": {
         "phpmailer/phpmailer": "^6.9"
     }
