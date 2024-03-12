@@ -5,58 +5,24 @@ require("./user.php");
  * The pattern for name field.
  */
 const PATTERN = "/^[a-zA-Z-' ]*$/";
+$errors = [];
 
 /**
- * For error messages.
- * fnameErr for first name error.
- * lnameErr for last name error.
- * fullNameErr for full name error.
+ * Make a instace of class user.
  */
-$fnameErr = $lnameErr = $fullNameErr = "";
+$user = new User();
+
 
 /**
- * Method to check the inputs.
+ * Check if method is post or not.
  */
-function testInput($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-
-    return $data;
-}
-
-/**
- * Creating the method for validating the fist name and last name.
- */
-function nameValidation($data, &$errorMsg)
-{
-    if (empty($data)) {
-        $errorMsg = "This is required field.";
-        return "";
-    } else {
-        $name = testInput($data);
-        if (!preg_match(PATTERN, $name)) {
-            $errorMsg = "Invalid input.";
-            return "";
-        } else if (empty($name)) {
-            $errorMsg = "Invalid input.";
-            return "";
-        } else {
-            return $name;
-        }
-    }
-}
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $fname = nameValidation($_POST['fname'], $fnameErr);
-    $lname = nameValidation($_POST['lname'], $lnameErr);
-
-    if(!empty($_POST['fullName'])){
-        $fullNameErr = "This field is not editable.";
-    }
+    $fname = User::testInput($_POST['fname']);
+    $lname = User::testInput($_POST['lname']);
+    $fname = $user->nameValidate($fname, PATTERN, 'fname');
+    $lname = $user->nameValidate($lname, PATTERN, 'lname');
+    $errors = $user->getError();
 
     // Accessing image
     $imgName = $_FILES['image']['name'];
@@ -69,7 +35,6 @@ if(!empty($fname) && !empty($lname)){
     $message = "Hello, {$fname} {$lname}."; 
 }
 
-$user = new User($fname, $lname);
 ?>
 
 <!doctype html>
@@ -93,13 +58,13 @@ $user = new User($fname, $lname);
                 <form class="row g-3 needs-validation" action="<?php echo $SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data"  onsubmit="return checkInputs()">
                     <div class="col-md-8">
                         <label for="validationCustom01" class="form-label">First name
-                            <span class="require" id="fnameErr">*</span>
+                            <span class="require" id="fnameErr">* <?php echo $errors['fname'];?></span>
                         </label>
                         <input type="text" class="form-control item" id="fname" name="fname"  value="" minlength="3" maxlength="20" required>
                     </div>
                     <div class="col-md-8">
                         <label for="validationCustom02" class="form-label">Last name
-                        <span class="require" id="lnameErr">*</span>
+                        <span class="require" id="lnameErr">* <?php echo $errors['lname'];?></span>
                         </label>
                         <input type="text" class="form-control item" id="lname" name="lname" accept="image/*"  value="" minlength="3" maxlength="20" required>
                     </div>
@@ -118,7 +83,7 @@ $user = new User($fname, $lname);
                 <?php
                 if (!empty($imgName)) { ?>
                     <img src="Uploads/<?php echo $imgName; ?>" height='400' width='400' style='display: block; margin: auto;'>
-                    <h4 style='margin: 10px 0; text-align:center;'><?php echo "{$user->getFirstName()} {$user->getLastName()}"; ?></h4>
+                    <h4 style='margin: 10px 0; text-align:center;'><?php echo "{$fname} {$lname}"; ?></h4>
                 <?php
                 }
                 ?>

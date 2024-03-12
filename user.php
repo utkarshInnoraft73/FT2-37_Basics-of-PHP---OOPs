@@ -1,34 +1,65 @@
 <?php
+
 /**
  * Make a user class to perform all the functionality.
  */
 
-class User {
-    public $fname; //First name of user.
-    public $lname; //Last name of user.
+class User
+{
 
     /**
-     * Create a custructor.
-     * Setting first name and last name.
+     * Array to store the errors for different fields.
      */
-    function __construct($fname, $lname)
-    {
-        $this->fname = $fname;
-        $this->lname = $lname;
-    }
+    public $errors = [];
 
-
-    
     /**
-     * Create functions to return the first name and last name.
+     * Public method to set the errors.
      */
-    function getFirstName()
+    function setError($field, $error)
     {
-        return $this->fname;
+        $this->errors[$field] = $error;
     }
 
-    function getLastName()
+    /**
+     * Method to validate the name.
+     * @param --> data, error message, patter, and the field name.
+     * @return --> data 
+     */
+    public function nameValidate($data, $pattern, $field)
     {
-        return $this->lname;
+        if (empty($data)) {
+            $this->setError($field, "This field is required");
+            return "";
+        } 
+        else if (!preg_match($pattern, $data)) {
+            $this->setError($field, "Please enter valid input.");
+            return "";
+        } 
+        else {
+            return $data;
+        }
+    }
+
+    /**
+     * Static method to check the input.
+     * @param --> data.
+     * @return --> data after checking.
+     */
+    public static function testInput($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+
+        return $data;
+    }
+
+    /**
+     * Method to get the method.
+     * @return -> a array stored the errors of different field.
+     */
+    function getError()
+    {
+        return $this->errors;
     }
 }
