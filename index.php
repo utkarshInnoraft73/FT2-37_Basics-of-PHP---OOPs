@@ -1,69 +1,45 @@
 <?php
-require("user.php");
-/*
-    Variable for error message.
-    fnameErr = for first name error.Invalid Input.
-    lnameErr = for last name error.
-    txteraErr = for textarea error.
-    */
-$fnameErr = $lnameErr = $txteraErr = "";
+// Importing the file user.php.
+require("./user.php");
+/**
+ * The pattern for name field.
+ */
+const PATTERN = "/^[a-zA-Z-' ]*$/";
+$errors = [];
+$subjects = [];
+$marks = [];
 
-    /**
-     * Function to validate the number.
-     * Params, data(user input) and errorMsg(empty string for setting the field error.).
-     * return data after validating.
-     */
-function nameValidation($data, &$errorMsg)
-{
-    if (empty($data)) {
-        $errorMsg = "This field is required";
-        return "";
-    } else {
-        $name = test_input($data);
-        if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
-            $errorMsg = "Only letters are allowed.";
-            return "";
-        } else if (empty($name)) {
-            $errorMsg = "Invalid Input.";
-            return "";
-        } else {
-            return $name;
-        }
-    }
-}
+/**
+ * Make a instace of class user.
+ */
+$user = new User();
 
+
+/**
+ * Check if method is post or not.
+ */
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $fname = nameValidation($_POST['fname'], $fnameErr);
-    $lname = nameValidation($_POST['lname'], $lnameErr);
+    $fname = User::testInput($_POST['fname']);                  // Check and and set the First name.
+    $lname = User::testInput($_POST['lname']);                  // Check and and set the Last name.
+    $fname = $user->nameValidate($fname, PATTERN, 'fname');     // Validate and set the First name.
+    $lname = $user->nameValidate($lname, PATTERN, 'lname');     // Validate and set the Last name.
+    $user -> validateSubjectMarks($_POST['marks'], 'textarea'); // Validate Subject marks pair.
+    $subjects = $user->getSubject();                            // Set the subject array.
+    $marks = $user->getMarks();                                 // Set marks.
+    $errors = $user->getError();                                // Set errors.
 
-    //   Accessing the Images.
-    $imgName = $_FILES['image']['name'];
-    $img_temp_name = $_FILES['image']['tmp_name'];
+    // Accessing image
+    $imgName = $_FILES['image']['name'];                        // Setting the image name.
+    $img_temp_name = $_FILES['image']['tmp_name'];              // Setting the temporary name of image.
     move_uploaded_file($img_temp_name, "Uploads/$imgName");
-
-    // Accessing Subject and marks.
-    if (!empty($_POST['marks'])) {
-        // Converting the string into array by new line.
-        $marks_lines = explode("\n", $_POST['marks']);
-    }
 }
 
-/**Testing input data. */
-function test_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
-
-$user = new User($fname, $lname);
 // Message to show after successfull submit the form 
-if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
-    $message = "Hello, {$user->getFirstName()} {$user->getLastName()}.";
+if (!empty($fname) && !empty($lname)) {
+    $message = "Hello, {$fname} {$lname}.";
 }
+
 ?>
 
 <!-- HTML start from here.-->
@@ -86,9 +62,9 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
             <div class="col-6">
                 <form class="row g-3 needs-validation" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" onsubmit="return checkInputs()">
                     <!-- Field to take input of first name. -->
-                <div class="col-md-8">
+                    <div class="col-md-8">
                         <label for="validationCustom01" class="form-label">First name
-                            <span class="require" id="fnameErr">*</span>
+                            <span class="require" id="fnameErr">* <?php echo $errors['fname']; ?></span>
                         </label>
                         <input type="text" class="form-control item" id="fname" name="fname" value="" minlength="3" maxlength="20" required>
                     </div>
@@ -96,7 +72,7 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
                     <!-- Field to take input of last name. -->
                     <div class="col-md-8">
                         <label for="validationCustom02" class="form-label">Last name
-                            <span class="require" id="lnameErr">*</span>
+                            <span class="require" id="lnameErr">* <?php echo $errors['lname']; ?></span>
                         </label>
                         <input type="text" class="form-control item" id="lname" name="lname" value="" minlength="3" maxlength="20" required>
                     </div>
@@ -111,7 +87,7 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
                     <!-- Field to take input of subject marks pair. -->
                     <div class="col-md-8">
                         <label for="floatingTextarea2">Subject marks (Format: Subject|Marks)
-                            <span class="require" id="marksErr">*</span>
+                            <span class="require" id="marksErr">* <?php echo $errors['textarea']; ?></span>
                         </label>
                         <div class="form-floating">
                             <textarea class="form-control" id="marks" style="height: 100px" name="marks" required></textarea>
@@ -126,12 +102,11 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
                 <?php
                 if (!empty($imgName)) { ?>
                     <img src="Uploads/<?php echo $imgName; ?>" height='400' width='400' style='display: block; margin: auto;'>
-                    <h4 style='margin: 10px 0; text-align:center;'><?php echo "{$user->getFirstName()} {$user->getLastName()}"; ?></h4>
+                    <h4 style='margin: 10px 0; text-align:center;'><?php echo "{$fname} {$lname}"; ?></h4>
                 <?php
                 }
                 ?>
             </div>
-
             <!-- Printing the table. -->
             <div>
                 <h4 style="margin: 10px 0; text-align:center;"> Entered Marks</h4>
@@ -145,32 +120,16 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
                     </thead>
                     <tbody>
                         <?php
-                        $i = 1;
-                        foreach ($marks_lines as $lines) {
-
-                            // Exploding marks_line as subject and marks seperating by "|".
-                            $parts = explode("|", $lines);
-                            if (is_numeric(trim($parts[0])) && is_numeric(trim($parts[1])) || (empty(trim($parts[0])) || empty(trim($parts[1])))) {
-                                $txteraErr = "Invalid Input, please enter valid pattern.";
-                                return;
-                            } 
-                            else if (is_numeric(trim($parts[0])) || !is_numeric(trim($parts[1]))) {
-                                $txteraErr = "Invalid Input";
-                                return;
-                            }
-                            
-                            else {
-                                $subject = trim($parts[0]);
-                                $mark = trim($parts[1]);
-                            }
+                        $srl = 1;
+                        for ($i = 0; $i < count($subjects); $i++) {
                         ?>
                             <tr>
-                                <td><?php echo $i; ?></td>
-                                <td><?php echo $subject; ?></td>
-                                <td><?php echo $mark; ?></td>
+                                <td><?php echo $srl; ?></td>
+                                <td><?php echo $subjects[$i]; ?></td>
+                                <td><?php echo $marks[$i]; ?></td>
                             </tr>
                         <?php
-                            $i = $i + 1;
+                            $srl = $srl + 1;
                         }
                         ?>
                     </tbody>
@@ -180,4 +139,5 @@ if (!empty($user->getFirstName()) && !empty($user->getLastName())) {
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>
