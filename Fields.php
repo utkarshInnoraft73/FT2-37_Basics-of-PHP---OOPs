@@ -1,6 +1,6 @@
 <?php
 
-require("./FetchApi.php");
+require( "./FetchApi.php" );
 
 
 /**
@@ -8,13 +8,6 @@ require("./FetchApi.php");
  */
 class Field
 {
-
-    /**
-     * Private interger type data.
-     * Store id.
-     */
-    private $id;
-
     /**
      * Private String data.
      * Store the field image url.
@@ -40,25 +33,24 @@ class Field
     private $fieldService;
 
     /**
+     * Private string type of data.
+     * Store the icons links of the field.
+     */
+    private $fieldIcons;
+
+    /**
      * 
      * Create the constructor for setting the values.
      */
 
-    function __construct($id, $fieldImage, $fieldTitle, $alias, $fieldService, )
+    function __construct( $fieldImage, $fieldTitle, $alias, $fieldService, $fieldIcons)
     {
-        $this->id = $id;
-        $this->fieldImage = $fieldImage;
-        $this->fieldTitle = $fieldTitle;
-        $this->alias = $alias;
-        $this->fieldService = $fieldService;
-    }
 
-    /**
-     * Getting the id.
-     */
-    function getId()
-    {
-        return $this->id;
+        $this->fieldImage = $fieldImage;        // Respective image of particular service.
+        $this->fieldTitle = $fieldTitle;        // Title of the particular field.
+        $this->alias = $alias;                  // Url of the respective service.
+        $this->fieldService = $fieldService;    // Url of all the services provided by a service.
+        $this->fieldIcons = $fieldIcons;
     }
 
     /**
@@ -88,37 +80,24 @@ class Field
     /**
      * getting the field services.
      */
-
     function getFieldService()
     {
         return $this->fieldService;
     }
-
+    
     /**
-     * Getting the icon link array.
+     * getting the field icons.
      */
-}
-function fieldServices()
-{
-    $fieldArray = [];
-
-    $arr_body = (new FetchApi('https://www.innoraft.com/jsonapi/node/services'))->apiCall();
-    $i = 0;
-    foreach ($arr_body['data'] as $data) {
-        $baseUrl = "https://www.innoraft.com";
-        if (($data['attributes']['field_secondary_title']) != NULL) {
-            $fieldTitle = $data['attributes']['field_secondary_title']['value'];
-            $fieldService =  $data['attributes']['field_services']['value'];
-            $fieldImage = $baseUrl . (new FetchApi($data['relationships']['field_image']['links']['related']['href']))->apiCall()['data']['attributes']['uri']['url'];
-            $alias = $baseUrl . $data['attributes']['path']['alias'];
-            
-        }
-
-        $i = $i+$i;
-
-        $obj = new Field($i, $fieldImage, $fieldTitle, $alias, $fieldService);
-        $fieldArray[] = $obj;
+    function getFieldIcons()
+    {
+        return $this->fieldIcons;
     }
-
-    return $fieldArray;
+    
+    /**
+     * getting the length of field icons.
+     */
+    function getFieldIconsLen()
+    {
+        return count($this->fieldIcons);
+    }
 }

@@ -1,7 +1,9 @@
 <?php
+/**
+ * Requirng the autoload file.
+ */
 
 require_once "vendor/autoload.php";
-
 use GuzzleHttp\Client;
 
 /*
@@ -28,9 +30,8 @@ class FetchApi
 
     /**
      * Public method to calling the api.
-     * @param request_method        request method.
-     * @param api                   the api.
-     * @return data                 The data geting after the calling.
+     * @param api         The api.
+     * @return data       The data geting after the calling.
      */
 
     function apiCall()

@@ -1,35 +1,74 @@
-
+/**
+ * Import google font.
+ */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 :root{
     --primary-color : #FF7900;
     --secondary-color: #4B5561;
 }
+
+/**
+ * Set the font family in all over the page.
+ */
 *{
     font-family: "Poppins", sans-serif;
 }
-.container{
+
+/**
+ * Define the with of container.
+ */
+.container {
     width: 1200px;
     margin: auto;
 }
-.d-flex{
+
+/**
+ * Define a class for display flex.
+ */
+.d-flex {
     display: flex;
 }
-.justify-content-center{
+
+/**
+ * Class for justify content center.
+ */
+.justify-content-center {
     justify-content: space-around;
 }
-.align-item-center{
+
+/**
+ * Class to set the item center.
+ */
+.align-item-center {
     align-items: center;
 }
-.flex-col{
+
+/**
+ * Class for set flex-direction column.
+ */
+.flex-col {
     flex-direction: column;
 }
-.itemLinks{
+
+/**
+ * Set the item links width is 45%.
+ */
+.itemLinks {
     width: 45%;
 }
-.itemImg{
+
+/**
+ * Set the width of image div.
+ */
+.itemImg {
     width: 45%;
 }
-.btn{
+
+/**
+ * Design the button.
+ */
+.btn {
     padding: 10px 25px;
     text-decoration: none;
     color: var(--secondary-color);
@@ -37,16 +76,30 @@
     border-radius: 5px;
 }
 
-.service-title{
+/**
+ * Style the title of services.
+ */
+.service-title {
     font-size: 50px;
     color: var(--primary-color);
     text-align: left;
 }
-.service-secondary-title{
+
+/**
+ * Style the sub-title of services.
+ */
+.service-secondary-title {
     font-size: 40px;
     color: #4B5561;
     text-align: left;
 }
+/**
+ * Set margin from top and bottom of serviceContainer.
+ */
+.serviceContainer {
+    margin: 30px 0;
+}
+
 ul{
     display: flex;
     flex-direction: column;
@@ -54,15 +107,22 @@ ul{
     padding: 0 21px !important;
     
 }
-ul li{
+
+ul li {
    list-style: circle;
 }
-ul li::marker{
+
+ul li::marker {
     list-style: circle;
     font-size: 30px;
     color: var(--primary-color);
 }
-ul li a{
+ul li a {
     color: var(--secondary-color);
     text-decoration: none;
+}
+
+.icon {
+    width: 70px;
+    margin: 0 10px;
 }
