@@ -9,31 +9,31 @@ require( "./FetchApi.php" );
 class Field
 {
     /**
-     * Private String data.
+     * @param Private String data type.
      * Store the field image url.
      */
     private $fieldImage;
 
     /**
-     * Private string type of data; 
+     * @param Private string type of data; 
      * Store the title of field.
      */
     private $fieldTitle;
 
     /**
-     * Private string type data.
+     * @param Private string type data.
      * Store the link of self explornation.
      */
     private $alias;
 
     /**
-     * Private string type of data.
-     * Store the services links of the field.
+     * @param Private string type of data.
+     * Store the services links of the field in the format of HTML.
      */
     private $fieldService;
 
     /**
-     * Private string type of data.
+     * @param Private string type of data.
      * Store the icons links of the field.
      */
     private $fieldIcons;
@@ -41,20 +41,32 @@ class Field
     /**
      * 
      * Create the constructor for setting the values.
+     * 
+     * @param fieldImage : String.
+     * Store the image URL for a particular service field.
+     * @param fieldTitle : String.
+     * Store the title for a particular service in the format of html.
+     * @param alias : String.
+     * Store the URL for more detail about a particular service. 
+     * @param fieldService : String.
+     * Store the services URLs for the particular service in the format of html. 
+     * @param fieldIcons : String.
+     * Store the Icons URL for the particular service.
      */
 
     function __construct( $fieldImage, $fieldTitle, $alias, $fieldService, $fieldIcons)
     {
 
-        $this->fieldImage = $fieldImage;        // Respective image of particular service.
-        $this->fieldTitle = $fieldTitle;        // Title of the particular field.
-        $this->alias = $alias;                  // Url of the respective service.
-        $this->fieldService = $fieldService;    // Url of all the services provided by a service.
+        $this->fieldImage = $fieldImage;
+        $this->fieldTitle = $fieldTitle;
+        $this->alias = $alias;    
+        $this->fieldService = $fieldService;
         $this->fieldIcons = $fieldIcons;
     }
 
     /**
      * Getting the fieldImage.
+     * @return fieldImage.
      */
     function getFieldImage()
     {
@@ -63,6 +75,7 @@ class Field
 
     /**
      * Getting the field title.
+     * @return fieldTitle.
      */
     function getFieldTitle()
     {
@@ -71,6 +84,7 @@ class Field
 
     /**
      * Getting the alias.
+     * @return alias.
      */
     function getAlias()
     {
@@ -79,6 +93,7 @@ class Field
 
     /**
      * getting the field services.
+     * @return fieldServices.
      */
     function getFieldService()
     {
@@ -87,6 +102,7 @@ class Field
     
     /**
      * getting the field icons.
+     * @return fieldIcons.
      */
     function getFieldIcons()
     {
@@ -95,6 +111,7 @@ class Field
     
     /**
      * getting the length of field icons.
+     * @return fieldIcons.
      */
     function getFieldIconsLen()
     {

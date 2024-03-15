@@ -4,20 +4,33 @@
  * PHP starts here.
  */
 
-/**
- * Import the Field Class.
- */
-
+//Import the Field Class.
 require("./Fields.php");
+
 $fieldArray = fieldServices();
 
+/**
+ * Function fieldService()
+ * Call the api.
+ * Check if the field title is null or not.
+ * If not null then.
+ * Store the all different data in different variables.
+ * @var fieldTitle string : Stores the service field title. 
+ * @var fieldService string : Stores the all services URLs of a particular field.
+ * @var fieldImage string: Stores the image URL of a particular field.
+ * @var alias string: Stores the URL for particular field for more detail about that service.
+ * @var iconArr array: Stores URLs of the icons for a particular field of service.
+ * 
+ * @return fieldArray array: Stores the all fetched data in the form of array.
+ * 
+ */
 function fieldServices()
 {
   $fieldArray = [];
 
-  $arr_body = (new FetchApi('https://www.innoraft.com/jsonapi/node/services'))->apiCall();
+  $arrBody = (new FetchApi('https://www.innoraft.com/jsonapi/node/services'))->apiCall();
 
-  foreach ($arr_body['data'] as $data) {
+  foreach ($arrBody['data'] as $data) {
     $baseUrl = "https://www.innoraft.com"; // Set the base url.
 
     /**
@@ -73,9 +86,8 @@ function fieldServices()
       <!-- Openning the for loop to display the data. -->
       <?php for ($i = 0; $i < count($fieldArray); $i++) {
 
-        // Checking the data is empty or not.
+        // Checking the field title is empty or not.
         if (!empty($fieldArray[$i]->getFieldTitle())) {
-
           /**
            * Checking the data index is even or odd.
            * If even then texts and links are in right and image is left.
@@ -99,10 +111,10 @@ function fieldServices()
                 <div class="links">
                   <?php echo $fieldArray[$i]->getFieldService(); ?>
                 </div>
-                <a class="btn" href="<?php echo $fieldArray[$i]->getAlias() ?>">Explore More</a>
+                <a class="btn" href="<?php echo $fieldArray[$i]->getAlias(); ?>">Explore More</a>
               </div>
               <div class="itemImg">
-                <img src="<?php echo $fieldArray[$i]->getFieldImage() ?>" alt="">
+                <img src="<?php echo $fieldArray[$i]->getFieldImage(); ?>" alt="">
               </div>
             </div>
           <?php }
@@ -114,7 +126,7 @@ function fieldServices()
           else { ?>
             <div class="serviceContainer d-flex justify-content-center align-item-center">
               <div class="itemImg">
-                <img src="<?php echo $fieldArray[$i]->getFieldImage() ?>" alt="">
+                <img src="<?php echo $fieldArray[$i]->getFieldImage(); ?>" alt="">
               </div>
               <div class="itemLinks">
                 <h2>
@@ -131,7 +143,7 @@ function fieldServices()
                 <div class="links">
                   <?php echo $fieldArray[$i]->getFieldService(); ?>
                 </div>
-                <a class="btn" href="<?php echo $fieldArray[$i]->getAlias() ?>">Explore More</a>
+                <a class="btn" href="<?php echo $fieldArray[$i]->getAlias(); ?>">Explore More</a>
               </div>
             </div>
       <?php }
