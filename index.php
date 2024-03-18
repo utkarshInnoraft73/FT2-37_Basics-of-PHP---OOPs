@@ -3,26 +3,35 @@
 /**
  * PHP starts here.
  */
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 //Import the Field Class.
-require("./Fields.php");
+require("./FIelds/Fields.php");
+
+/**
+ * @var constant String.
+ *   Base url of the.
+ */
+define("BASEURL", "https://www.innoraft.com");
 
 $fieldArray = fieldServices();
 
 /**
- * Function fieldService()
- * Call the api.
- * Check if the field title is null or not.
- * If not null then.
- * Store the all different data in different variables.
- * @var fieldTitle string : Stores the service field title. 
- * @var fieldService string : Stores the all services URLs of a particular field.
- * @var fieldImage string: Stores the image URL of a particular field.
- * @var alias string: Stores the URL for particular field for more detail about that service.
- * @var iconArr array: Stores URLs of the icons for a particular field of service.
+ * To Store the all fetched data from API.
  * 
- * @return fieldArray array: Stores the all fetched data in the form of array.
+ * @var fieldTitle string.
+ *   Stores the service field title. 
+ * @var fieldService string.
+ *   Stores the all services URLs of a particular field.
+ * @var fieldImage string.
+ *   Stores the image URL of a particular field.
+ * @var alias string.
+ *   Stores the URL for particular field for more detail about that service.
+ * @var iconArr array.
+ *   Stores URLs of the icons for a particular field of service.
  * 
+ * @return fieldArray array.
+ *   Stores the all fetched data in the form of array.
  */
 function fieldServices()
 {
@@ -31,30 +40,18 @@ function fieldServices()
   $arrBody = (new FetchApi('https://www.innoraft.com/jsonapi/node/services'))->apiCall();
 
   foreach ($arrBody['data'] as $data) {
-    $baseUrl = "https://www.innoraft.com"; // Set the base url.
 
-    /**
-     * Check of the service title is null or not.
-     * 
-     * If not null then fetch the all required data.
-     * 1. Field title.
-     * 2. Field services links.
-     * 3. Field images.
-     * 4. Respective self url of particular service.
-     * 5. Respective service icons.
-     * 
-     */
-    if (($data['attributes']['field_secondary_title']) != NULL) {
+    //Check if the field title is not null.
+    if ($data['attributes']['field_secondary_title'] != NULL) {
       $iconsArr = [];
       $fieldTitle = $data['attributes']['field_secondary_title']['value'];
       $fieldService =  $data['attributes']['field_services']['value'];
-      $fieldImage = $baseUrl . (new FetchApi($data['relationships']['field_image']['links']['related']['href']))->apiCall()['data']['attributes']['uri']['url'];
-      $alias = $baseUrl . $data['attributes']['path']['alias'];
+      $fieldImage = BASEURL . (new FetchApi($data['relationships']['field_image']['links']['related']['href']))->apiCall()['data']['attributes']['uri']['url'];
+      $alias = BASEURL . $data['attributes']['path']['alias'];
       $fieldIcons = (new FetchApi($data['relationships']['field_service_icon']['links']['related']['href']))->apiCall()['data'];
 
       for ($i = 0; $i < count($fieldIcons); $i++) {
-        $iconArray = $baseUrl . (new FetchApi($fieldIcons[$i]['relationships']['field_media_image']['links']['related']['href']))->apiCall()['data']['attributes']['uri']['url'];
-        $iconsArr[] = $iconArray;
+        $iconsArr[] = BASEURL . (new FetchApi($fieldIcons[$i]['relationships']['field_media_image']['links']['related']['href']))->apiCall()['data']['attributes']['uri']['url'];
       }
       $obj = new Field($fieldImage, $fieldTitle, $alias, $fieldService, $iconsArr);
       $fieldArray[] = $obj;
@@ -62,7 +59,6 @@ function fieldServices()
   }
   return $fieldArray;
 }
-
 /**
  * PHP ends here.
  */
@@ -76,7 +72,7 @@ function fieldServices()
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./Styles/style.css">
 </head>
 
 <body>
@@ -86,64 +82,60 @@ function fieldServices()
       <!-- Openning the for loop to display the data. -->
       <?php for ($i = 0; $i < count($fieldArray); $i++) {
 
+        $indexedEle = $fieldArray[$i];
         // Checking the field title is empty or not.
-        if (!empty($fieldArray[$i]->getFieldTitle())) {
-          /**
-           * Checking the data index is even or odd.
-           * If even then texts and links are in right and image is left.
-           */
+        if (!empty($indexedEle->getFieldTitle())) {
+
+          //Check if the field index is even.
           if ($i % 2 == 0) {
       ?>
             <div class="serviceContainer d-flex justify-content-center align-item-center">
               <div class="itemLinks">
                 <h2>
-                  <?php echo $fieldArray[$i]->getFieldTitle(); ?>
+                  <?php echo $indexedEle->getFieldTitle(); ?>
                 </h2>
                 <div class="servicesIcons d-flex">
                   <?php
-                  for ($j = 0; $j < $fieldArray[$i]->getFieldIconsLen(); $j++) { ?>
+                  for ($j = 0; $j < $indexedEle->getFieldIconsLen(); $j++) { ?>
 
                     <div class="links">
-                      <img class="icon" src="<?php echo $fieldArray[$i]->getFieldIcons()[$j]; ?>" alt="">
+                      <img class="icon" src="<?php echo $indexedEle->getFieldIcons()[$j]; ?>">
                     </div>
                   <?php } ?>
                 </div>
                 <div class="links">
-                  <?php echo $fieldArray[$i]->getFieldService(); ?>
+                  <?php echo $indexedEle->getFieldService(); ?>
                 </div>
-                <a class="btn" href="<?php echo $fieldArray[$i]->getAlias(); ?>">Explore More</a>
+                <a class="btn" href="<?php echo $indexedEle->getAlias(); ?>">Explore More</a>
               </div>
               <div class="itemImg">
-                <img src="<?php echo $fieldArray[$i]->getFieldImage(); ?>" alt="">
+                <img src="<?php echo $indexedEle->getFieldImage(); ?>">
               </div>
             </div>
           <?php }
-
-          /**
-           * Checking the data index is even or odd.
-           * If odd then texts and links are in left and image is right.
-           */
+          
+          // If field index is not even.
           else { ?>
             <div class="serviceContainer d-flex justify-content-center align-item-center">
               <div class="itemImg">
-                <img src="<?php echo $fieldArray[$i]->getFieldImage(); ?>" alt="">
+                <img src="<?php echo $indexedEle->getFieldImage(); ?>">
               </div>
               <div class="itemLinks">
                 <h2>
-                  <?php echo $fieldArray[$i]->getFieldTitle(); ?>
+                  <?php echo $indexedEle->getFieldTitle(); ?>
                 </h2>
                 <div class="servicesIcons d-flex">
                   <?php
-                  for ($j = 0; $j < $fieldArray[$i]->getFieldIconsLen(); $j++) { ?>
+                  for ($j = 0; $j < $indexedEle->getFieldIconsLen(); $j++) { ?>
                     <div class="links">
-                      <img class="icon" src="<?php echo $fieldArray[$i]->getFieldIcons()[$j]; ?>" alt="">
+                      <img class="icon" src="<?php echo $indexedEle->getFieldIcons()[$j]; ?>">
                     </div>
                   <?php }?>
                 </div>
                 <div class="links">
-                  <?php echo $fieldArray[$i]->getFieldService(); ?>
+                  <?php echo $indexedEle->getFieldService(); ?>
                 </div>
-                <a class="btn" href="<?php echo $fieldArray[$i]->getAlias(); ?>">Explore More</a>
+                <a class="btn" href="<?php echo $indexedEle->getAlias(); ?>">Explore More</a>
               </div>
             </div>
       <?php }
