@@ -21,7 +21,7 @@ class FetchApi {
      */
      function __construct(string $url) {
         /**
-         * @param url.
+         * @param string url.
          *   Api URL.
          */
         $this->url = $url;
@@ -29,10 +29,10 @@ class FetchApi {
 
     /**
      * Public method o calling the api.
-     * @param api        
+     * @param string api .       
      *   The api.
      * 
-     * @return Object.   
+     * @return object.   
      *   Returns the data after fetching data.
      */
     function apiCall() {
@@ -50,8 +50,7 @@ class FetchApi {
             $body = $response->getBody();
             return json_decode($body, TRUE);
         } 
-        else {
-            echo "Bad HTTP request";
-        }
+        return FALSE;
     }
 }
+

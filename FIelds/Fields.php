@@ -6,31 +6,31 @@ require("./FetchApi/FetchApi.php");
  */
 class Field {
     /**
-     * @param Private String data type.
+     * @param string.
      *   Store the field image url.
      */
     private $fieldImage;
 
     /**
-     * @param Private string type of data; 
+     * @param string. 
      *   Store the title of field.
      */
     private $fieldTitle;
 
     /**
-     * @param Private string type data.
+     * @param string.
      *   Store the link of self explornation.
      */
     private $alias;
 
     /**
-     * @param Private string type of data.
+     * @param string.
      *   Store the services links of the field in the format of HTML.
      */
     private $fieldService;
 
     /**
-     * @param Private string type of data.
+     * @param string.
      *   Store the icons links of the field.
      */
     private $fieldIcons;
@@ -39,15 +39,15 @@ class Field {
      * 
      * Create the constructor for setting the values.
      * 
-     * @param fieldImage : String.
+     * @param string fieldImage.
      *   Store the image URL for a particular service field.
-     * @param fieldTitle : String.
+     * @param string fieldTitle.
      *   Store the title for a particular service in the format of html.
-     * @param alias : String.
+     * @param string alias.
      *   Store the URL for more detail about a particular service. 
-     * @param fieldService : String.
+     * @param string fieldService. 
      *   Store the services URLs for the particular service in the format of html. 
-     * @param fieldIcons : String.
+     * @param string fieldIcons.
      *   Store the Icons URL for the particular service.
      */
 
@@ -120,3 +120,4 @@ class Field {
         return count($this->fieldIcons);
     }
 }
+

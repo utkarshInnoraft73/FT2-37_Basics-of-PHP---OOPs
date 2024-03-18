@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 require("./FIelds/Fields.php");
 
 /**
- * @var constant String.
+ * @var string BASEUPL.
  *   Base url of the.
  */
 define("BASEURL", "https://www.innoraft.com");
@@ -19,18 +19,18 @@ $fieldArray = fieldServices();
 /**
  * To Store the all fetched data from API.
  * 
- * @var fieldTitle string.
+ * @var string fieldTitle.
  *   Stores the service field title. 
- * @var fieldService string.
+ * @var string fieldService.
  *   Stores the all services URLs of a particular field.
- * @var fieldImage string.
+ * @var string fieldImage.
  *   Stores the image URL of a particular field.
- * @var alias string.
+ * @var string alias.
  *   Stores the URL for particular field for more detail about that service.
- * @var iconArr array.
+ * @var array iconArr.
  *   Stores URLs of the icons for a particular field of service.
  * 
- * @return fieldArray array.
+ * @return array fieldArray.
  *   Stores the all fetched data in the form of array.
  */
 function fieldServices()
@@ -53,11 +53,12 @@ function fieldServices()
       for ($i = 0; $i < count($fieldIcons); $i++) {
         $iconsArr[] = BASEURL . (new FetchApi($fieldIcons[$i]['relationships']['field_media_image']['links']['related']['href']))->apiCall()['data']['attributes']['uri']['url'];
       }
-      $obj = new Field($fieldImage, $fieldTitle, $alias, $fieldService, $iconsArr);
-      $fieldArray[] = $obj;
+      $fieldArray[] = new Field($fieldImage, $fieldTitle, $alias, $fieldService, $iconsArr);
+
     }
   }
   return $fieldArray;
+  
 }
 /**
  * PHP ends here.
@@ -113,7 +114,7 @@ function fieldServices()
               </div>
             </div>
           <?php }
-          
+
           // If field index is not even.
           else { ?>
             <div class="serviceContainer d-flex justify-content-center align-item-center">
@@ -147,3 +148,4 @@ function fieldServices()
 
 </html>
 <!-- HTML ends here. -->
+
