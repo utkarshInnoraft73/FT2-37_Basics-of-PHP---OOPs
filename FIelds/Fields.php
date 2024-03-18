@@ -7,31 +7,31 @@ require("./FetchApi/FetchApi.php");
 class Field
 {
     /**
-     * @param string.
+     * @param string $fieldImage.
      *   Store the field image url.
      */
     private $fieldImage;
 
     /**
-     * @param string. 
+     * @param string $fieldTitle. 
      *   Store the title of field.
      */
     private $fieldTitle;
 
     /**
-     * @param string.
+     * @param string $alias.
      *   Store the link of self explornation.
      */
     private $alias;
 
     /**
-     * @param string.
+     * @param string $fieldService.
      *   Store the services links of the field in the format of HTML.
      */
     private $fieldService;
 
     /**
-     * @param string.
+     * @param string $fieldIcons.
      *   Store the icons links of the field.
      */
     private $fieldIcons;
@@ -40,18 +40,18 @@ class Field
      * 
      * Create the constructor for setting the values.
      * 
-     * @param string fieldImage.
+     * @param string $fieldImage.
      *   Store the image URL for a particular service field.
-     * @param string fieldTitle.
+     * @param string $fieldTitle.
      *   Store the title for a particular service in the format of html.
-     * @param string alias.
+     * @param string $alias.
      *   Store the URL for more detail about a particular service. 
-     * @param string fieldService. 
+     * @param string $fieldService. 
      *   Store the services URLs for the particular service in the format of html. 
-     * @param string fieldIcons.
+     * @param string $fieldIcons.
      *   Store the Icons URL for the particular service.
      */
-    function __construct($fieldImage, $fieldTitle, $alias, $fieldService, $fieldIcons)
+    function __construct(string $fieldImage, string $fieldTitle, string $alias, string $fieldService, array $fieldIcons)
     {
 
         $this->fieldImage = $fieldImage;

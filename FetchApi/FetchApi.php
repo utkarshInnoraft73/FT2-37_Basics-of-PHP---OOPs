@@ -1,17 +1,20 @@
 <?php
+
 /**
  * Requirng the autoload file.
  */
-
 require_once "vendor/autoload.php";
+
 use GuzzleHttp\Client;
 
 /*
 * Creating a class of apiCall.
 */
-class FetchApi {
+
+class FetchApi
+{
     /**
-     * @param string.
+     * @param string $url.
      *   Stores the api url.
      */
     public $url;
@@ -19,13 +22,11 @@ class FetchApi {
     /**
      * Create a constructor for setting the url.
      */
-     function __construct(string $url) {
-        /**
-         * @param string url.
-         *   Api URL.
-         */
+    function __construct(string $url)
+    {
+        // Set API URL.
         $this->url = $url;
-     }
+    }
 
     /**
      * Public method o calling the api.
@@ -35,22 +36,20 @@ class FetchApi {
      * @return object.   
      *   Returns the data after fetching data.
      */
-    function apiCall() {
-        /**
-         * Create instace of class Client.
-         */
+    function apiCall()
+    {
+
+        // Create instace of class Client.
         $client = new Client();
-        /**
-         * Get request to the api.
-         */ 
+
+        // Get request to the api.
         $response = $client->request('GET', $this->url);
 
         //Check if the api response status is 200 or not.
         if ($response->getStatusCode() == 200) {
             $body = $response->getBody();
             return json_decode($body, TRUE);
-        } 
+        }
         return FALSE;
     }
 }
-

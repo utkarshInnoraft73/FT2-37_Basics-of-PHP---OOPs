@@ -3,41 +3,49 @@
 /**
  * PHP starts here.
  */
+
 //Import the Field Class.
 require("./FIelds/Fields.php");
 
 /**
+ * @var string API.
+ *   Constant API url.
+ */
+define("API", "https://www.innoraft.com/jsonapi/node/services");
+
+/**
  * @var string BASEUPL.
- *   Base url of the.
+ *   Constant base url.
  */
 define("BASEURL", "https://www.innoraft.com");
+
 $fieldArray = fieldServices();
 
 /**
  * To Store the all fetched data from API.
  * 
- * @var string fieldTitle.
+ * @var string $fieldTitle.
  *   Stores the service field title. 
- * @var string fieldService.
+ * @var string $fieldService.
  *   Stores the all services URLs of a particular field.
- * @var string fieldImage.
+ * @var string $fieldImage.
  *   Stores the image URL of a particular field.
- * @var string alias.
+ * @var string $alias.
  *   Stores the URL for particular field for more detail about that service.
- * @var array iconArr.
+ * @var array $iconArr.
  *   Stores URLs of the icons for a particular field of service.
  * 
- * @return array fieldArray.
+ * @return array $fieldArray.
  *   Stores the all fetched data in the form of array.
  */
 function fieldServices()
 {
   $fieldArray = [];
-  $arrBody = (new FetchApi('https://www.innoraft.com/jsonapi/node/services'))->apiCall();
+  $arrBody = (new FetchApi(API))->apiCall();
 
   foreach ($arrBody['data'] as $data) {
 
-    //Check if the field title is not null.
+    // Check if the field title is not null.
     if ($data['attributes']['field_secondary_title'] != NULL) {
       $iconsArr = [];
       $fieldTitle = $data['attributes']['field_secondary_title']['value'];
@@ -54,11 +62,11 @@ function fieldServices()
   }
   return $fieldArray;
 }
+
 /**
  * PHP ends here.
  */
 ?>
-
 <!-- HTML starts here. -->
 <!DOCTYPE html>
 <html lang="en">
@@ -78,10 +86,11 @@ function fieldServices()
       <?php for ($i = 0; $i < count($fieldArray); $i++) {
 
         $indexedEle = $fieldArray[$i];
+
         // Checking the field title is empty or not.
         if (!empty($indexedEle->getFieldTitle())) {
 
-          //Check if the field index is even.
+          // Check if the field index is even.
           if ($i % 2 == 0) {
       ?>
             <div class="serviceContainer d-flex justify-content-center align-item-center">
@@ -141,5 +150,4 @@ function fieldServices()
 </body>
 
 </html>
-
 <!-- HTML ends here. -->
