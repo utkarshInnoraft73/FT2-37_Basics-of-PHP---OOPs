@@ -3,8 +3,6 @@
 /**
  * PHP starts here.
  */
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 //Import the Field Class.
 require("./FIelds/Fields.php");
 
@@ -13,7 +11,6 @@ require("./FIelds/Fields.php");
  *   Base url of the.
  */
 define("BASEURL", "https://www.innoraft.com");
-
 $fieldArray = fieldServices();
 
 /**
@@ -36,7 +33,6 @@ $fieldArray = fieldServices();
 function fieldServices()
 {
   $fieldArray = [];
-
   $arrBody = (new FetchApi('https://www.innoraft.com/jsonapi/node/services'))->apiCall();
 
   foreach ($arrBody['data'] as $data) {
@@ -54,11 +50,9 @@ function fieldServices()
         $iconsArr[] = BASEURL . (new FetchApi($fieldIcons[$i]['relationships']['field_media_image']['links']['related']['href']))->apiCall()['data']['attributes']['uri']['url'];
       }
       $fieldArray[] = new Field($fieldImage, $fieldTitle, $alias, $fieldService, $iconsArr);
-
     }
   }
   return $fieldArray;
-  
 }
 /**
  * PHP ends here.
@@ -131,7 +125,7 @@ function fieldServices()
                     <div class="links">
                       <img class="icon" src="<?php echo $indexedEle->getFieldIcons()[$j]; ?>">
                     </div>
-                  <?php }?>
+                  <?php } ?>
                 </div>
                 <div class="links">
                   <?php echo $indexedEle->getFieldService(); ?>
@@ -147,5 +141,5 @@ function fieldServices()
 </body>
 
 </html>
-<!-- HTML ends here. -->
 
+<!-- HTML ends here. -->

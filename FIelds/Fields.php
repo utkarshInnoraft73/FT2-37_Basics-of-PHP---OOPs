@@ -4,7 +4,8 @@ require("./FetchApi/FetchApi.php");
 /**
  * Create a class of fields.
  */
-class Field {
+class Field
+{
     /**
      * @param string.
      *   Store the field image url.
@@ -50,8 +51,8 @@ class Field {
      * @param string fieldIcons.
      *   Store the Icons URL for the particular service.
      */
-
-    function __construct($fieldImage, $fieldTitle, $alias, $fieldService, $fieldIcons) {
+    function __construct($fieldImage, $fieldTitle, $alias, $fieldService, $fieldIcons)
+    {
 
         $this->fieldImage = $fieldImage;
         $this->fieldTitle = $fieldTitle;
@@ -66,7 +67,8 @@ class Field {
      * @return string.
      *   Returns the image URL of the service field.
      */
-    function getFieldImage() {
+    function getFieldImage()
+    {
         return $this->fieldImage;
     }
 
@@ -76,7 +78,8 @@ class Field {
      * @return string.
      *   Returns the title of the service field.
      */
-    function getFieldTitle() {
+    function getFieldTitle()
+    {
         return $this->fieldTitle;
     }
 
@@ -86,7 +89,8 @@ class Field {
      * @return string.
      *   Returns the icons URL of the service field.
      */
-    function getAlias() {
+    function getAlias()
+    {
         return $this->alias;
     }
 
@@ -96,7 +100,8 @@ class Field {
      * @return string.
      *   Returns the icons URL of the service field in the form of HTML.
      */
-    function getFieldService() {
+    function getFieldService()
+    {
         return $this->fieldService;
     }
 
@@ -106,7 +111,8 @@ class Field {
      * @return string.
      *   Returns the icons URL of the service field.
      */
-    function getFieldIcons() {
+    function getFieldIcons()
+    {
         return $this->fieldIcons;
     }
 
@@ -116,8 +122,8 @@ class Field {
      * @return int.
      *   Returns the length of field icons.
      */
-    function getFieldIconsLen() {
+    function getFieldIconsLen()
+    {
         return count($this->fieldIcons);
     }
 }
-
